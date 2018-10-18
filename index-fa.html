@@ -1,0 +1,125 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="author" content="farid shahidi">
+		<script type="text/javascript" src="scripts/graphics.js"></script>
+		<script type="text/javascript" src="scripts/lexparser.js"></script>
+		<script type="text/javascript" src="scripts/sintacticparser.js"></script>
+		<script type="text/javascript" src="scripts/mathematic.js"></script>
+		<script type="text/javascript" src="scripts/mathdraw.js"></script>
+
+		<script type="text/javascript">
+			window.onload = drawGraphicTable;
+		</script>
+
+	</head>
+
+	<body>
+	<h1 style="text-align: center"> برنامه ماشین حساب مهندسی با مشتق گیری</h1>
+		<table>
+			<tr>
+				<td align="center" colspan="4">
+					<p id="errorMessage" style="color: #ff0000; font-weight: bold;"></p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4">
+					<input id="defFunction" type="text" size="80" onchange="document.getElementById('errorMessage').innerHTML='';createFunction()" />
+					&nbsp;&nbsp;&nbsp;<button id="drawButton" onclick="drawFunction()" disabled="true">رسم نمودار</button>
+					&nbsp;&nbsp;&nbsp;<button id="clearButton" onclick="clearTable()" disabled="true">پاک کردن صفحه</button>
+					&nbsp;&nbsp;&nbsp;<button id="deriveButton" onclick="derive()" disabled="true">مشتق گیری</button>
+					&nbsp;&nbsp;&nbsp;<button id="saveButton" onclick="save()" disabled="true">دخیره</button>
+					&nbsp;&nbsp;&nbsp;<button id="simplifyButton" onclick="simplify()" disabled="true">ساده سازی</button>
+				</td>
+			</tr>
+			<tr style="visibility: hidden;">
+				<td colspan="4">
+					<span style="color: blue; font-weight: bold;">Ancho de Línea (píxeles):</span>
+					<button onclick="if (ancho > 1) ancho--; document.getElementById('anchoLinea').innerHTML = ancho "><</button>
+					<span id="anchoLinea" style="color: #ff0000; font-weight: bold;"></span>
+					<button onclick="ancho++; document.getElementById('anchoLinea').innerHTML = ancho">></button>
+				</td>
+			</tr>
+			<tr style="visibility: hidden;">
+				<td width="30%" valign="middle">
+					<table>
+						<tr>
+							<td>
+								<span style="color: blue; font-weight: bold;">Rango X:</span>
+								<button onclick="rangoX.min--; document.getElementById('rangoXMin').innerHTML = rangoX.min; disableButtons()"><</button>
+								<span id="rangoXMin" style="color: #ff0000; font-weight: bold;"></span>
+								<button onclick="if (rangoX.min < -1) { rangoX.min++; document.getElementById('rangoXMin').innerHTML = rangoX.min; disableButtons()}">></button>
+								<span style="color: blue; font-weight: bold;">  a  </span>
+								<button onclick="if (rangoX.max > 1) {rangoX.max--; document.getElementById('rangoXMax').innerHTML = rangoX.max; disableButtons()}"><</button>
+								<span id="rangoXMax" style="color: #ff0000; font-weight: bold;"></span>
+								<button onclick="rangoX.max++; document.getElementById('rangoXMax').innerHTML = rangoX.max; disableButtons()">></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span style="color: blue; font-weight: bold;">Rango Y:</span>
+								<button onclick="rangoY.min--; document.getElementById('rangoYMin').innerHTML = rangoY.min; disableButtons()"><</button>
+								<span id="rangoYMin" style="color: #ff0000; font-weight: bold;"></span>
+								<button onclick="if (rangoY.min < -1) { rangoY.min++; document.getElementById('rangoYMin').innerHTML = rangoY.min; disableButtons()}">></button>
+								<span style="color: blue; font-weight: bold;">  a  </span>
+								<button onclick="if (rangoY.max > 1) {rangoY.max--; document.getElementById('rangoYMax').innerHTML = rangoY.max; disableButtons()}"><</button>
+								<span id="rangoYMax" style="color: #ff0000; font-weight: bold;"></span>
+								<button onclick="rangoY.max++; document.getElementById('rangoYMax').innerHTML = rangoY.max; disableButtons()">></button>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td width="20%" valign="middle">
+					<button id="reSizeButton" disabled="true" onclick="reSize()">Resize</button>
+				</td>
+				<td width="20%" valign="middle">
+					<table>
+						<tr>
+							<td id="colorTD" width="50px">&nbsp;</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											<span style="color: blue; font-weight: bold;">Red:</span>
+											<input id="redInput" type="text" size="3" onkeypress="return filterNumber(event)" onchange="changeColor(event)" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<span style="color: blue; font-weight: bold;">Green:</span>
+											<input id="greenInput" type="text" size="3" onkeypress="return filterNumber(event)" onchange="changeColor(event)" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<span style="color: blue; font-weight: bold;">Blue:</span>
+											<input id="blueInput" type="text" size="3" onkeypress="return filterNumber(event)" onchange="changeColor(event)" />
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td width="30%" valign="middle">
+					<table>
+						<tr>
+							<td>
+								<span style="color: blue; font-weight: bold;">Size X (pixeles):</span>
+								<input id="sizeX" type="text" size="4" onkeypress="return filterNumber(event)" onchange="disableButtons()" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span style="color: blue; font-weight: bold;">Size Y (pixeles):</span>
+								<input id="sizeY" type="text" size="4" onkeypress="return filterNumber(event)" onchange="disableButtons()" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<table id="repositoryTable" style="border-style: double; border-color: black">
+		</table>
+	</body>
+</html>
